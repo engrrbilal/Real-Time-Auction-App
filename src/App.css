@@ -1,0 +1,25 @@
+html{
+  height: 80%;
+}
+.feed{
+  word-break: break-all
+}
+.iconn{
+  text-align: center
+}
+/* .signBackground {
+  width: 100%;
+  min-height:100%;
+  background: 
+  url('./images/parkme-logo (3).jpg');
+  background-attachment: fixed;
+  background-size: cover;
+}
+.userBackground {
+  width: 100%;
+  min-height:100%;
+  background: 
+  url('./images/parking1.jpg');
+  background-attachment: fixed;
+  background-size: cover;
+} */
