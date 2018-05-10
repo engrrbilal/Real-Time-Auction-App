@@ -1,16 +1,11 @@
 const dataReducerDefaultState = {
-    userData:[],
+    usersData:[],
     companyData:[],
-    jobPost:[],
-    jobData:[],
     userProfile:[],
     updateData:[],
-    addArea:[],
-    parkingArea:[],
-    bookedSlots:[],
-    cancelSlots:[],
-    usersFeedback:[],
-    feedbackReply:[]
+    submitAuctionData:[],
+    auctionsData:[],
+    submitBidData:[]
 }
 
 export default (state = dataReducerDefaultState, action) => {
@@ -19,7 +14,23 @@ export default (state = dataReducerDefaultState, action) => {
             case 'USER-DATA':
             return ({
                 ...state,
-                    userData:action.data
+                    usersData:action.data
+            })
+            case 'START-SUBMIT-AUCTION':
+            return ({
+                ...state,
+                    submitAuctionData:action.data
+            })
+            case 'AUCTIONS-DATA':
+            console.log(action.data)
+            return ({
+                ...state,
+                auctionsData:action.data
+            })
+            case 'START-SUBMIT-BID':
+            return ({
+                ...state,
+                    submitBidData:action.data
             })
             case 'DELETE-USER':
             return ({
@@ -36,39 +47,7 @@ export default (state = dataReducerDefaultState, action) => {
                 ...state,
                 updateData:action.updates
                 })
-            case 'ADD-AREA':
-            return({
-                ...state,
-                addArea:action.parkingArea,
-                addSlots:action.parkingSlots
-            })
-            case 'AREA-DATA':
-            return({
-                ...state,
-                parkingArea:action.data
-            })
-            case 'START-BOOKING':
-            return({
-                ...state,
-                bookedSlots:action.data
-            })
-            case 'CANCEL-BOOKING':
-            return({
-                ...state,
-                cancelSlots:action.data
-            })
-            case 'USER-FEEDBACKS-DATA':
-            console.log(action.data)
-            return({
-                ...state,
-               usersFeedback:action.data
-            })
-            case 'USER-FEEDBACK-REPLY':
-            console.log(action.data)
-            return({
-                ...state,
-               feedbackReply:action.data
-            })
+            
         default:
             return state;
     }

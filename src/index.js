@@ -13,7 +13,7 @@ var config = {
     authDomain: "auction-app-7b58a.firebaseapp.com",
     databaseURL: "https://auction-app-7b58a.firebaseio.com",
     projectId: "auction-app-7b58a",
-    storageBucket: "",
+    storageBucket: "auction-app-7b58a.appspot.com",
     messagingSenderId: "431936014331"
 };
   firebase.initializeApp(config);
