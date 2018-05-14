@@ -7,6 +7,9 @@ html{
 .iconn{
   text-align: center
 }
+.auct:active{
+  background-color: black
+}
 /* .signBackground {
   width: 100%;
   min-height:100%;

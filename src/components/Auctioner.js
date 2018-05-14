@@ -219,29 +219,6 @@ handleChangeTime = (event, time) => {
     }
 
   }
-  const styles = {
-    style : {
-      height: 630,
-      width: 500,
-      backgroundColor:"lightGrey",
-      marginTop: "7%",
-      marginLeft:"37%",
-      display: 'inline-block',
-      opacity:"0.9",
-    },
-    progress: {
-        width: '66.5%', 
-        height: '10px', 
-        margin: '8px',
-    },
-    customWidth: {
-      width: 350,
-    },
-    customContentStyle : {
-      width: 450,
-      maxWidth: 'none',
-    }
-  };
   const mapStateToProps = (state)=>{
     console.log(state)
     return{

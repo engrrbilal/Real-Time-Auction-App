@@ -193,9 +193,9 @@ class Mobiles extends React.Component{
             />,
         ];
       return(
-        <div className="signBackground" style={{width:"100%",height:600}}>
+        <div className="signBackground">
             <h1 style={{color:"black",fontSize:"40px",fontFamily:"Times New Roman",
-            textAlign: 'center',marginTop:"2%"}}>
+            textAlign: 'center'}}>
                 Mobiles           
             </h1>
             <div style={styles.root}>
