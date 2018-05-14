@@ -5,7 +5,8 @@ const dataReducerDefaultState = {
     updateData:[],
     submitAuctionData:[],
     auctionsData:[],
-    submitBidData:[]
+    submitBidData:[],
+    flag:''
 }
 
 export default (state = dataReducerDefaultState, action) => {
@@ -17,9 +18,12 @@ export default (state = dataReducerDefaultState, action) => {
                     usersData:action.data
             })
             case 'START-SUBMIT-AUCTION':
+            console.log(action.flag)
+            
             return ({
                 ...state,
-                    submitAuctionData:action.data
+                    submitAuctionData:action.data,
+                    flag:action.flag
             })
             case 'AUCTIONS-DATA':
             console.log(action.data)
@@ -30,12 +34,7 @@ export default (state = dataReducerDefaultState, action) => {
             case 'START-SUBMIT-BID':
             return ({
                 ...state,
-                    submitBidData:action.data
-            })
-            case 'DELETE-USER':
-            return ({
-                ...state,
-                deleteStudent:action.data
+                    submitBidData:action.data,
             })
             case 'USER-PROFILE-DATA':
             return ({

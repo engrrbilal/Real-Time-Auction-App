@@ -15,13 +15,6 @@ import firebase from 'firebase'
 import history from './history';
 import Home from './components/Home';
 import { blueGrey500, blueGrey900, blue100, indigo100, indigo500, blue900, blue500, grey50, red100 } from 'material-ui/styles/colors';
-import Bidder from './components/Bidder';
-import Auctioner from './components/Auctioner';
-import Computers from './components/Computers';
-import Mobiles from './components/Mobiles';
-import Electronics from './components/Electronics';
-import Cameras from './components/Cameras';
-import Others from './components/Others';
 import Profile from './components/Profile';
 const Logged = (props) => (
   <IconMenu
@@ -32,22 +25,13 @@ const Logged = (props) => (
     targetOrigin={{horizontal: 'right', vertical: 'top'}}
     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
   >
-    <MenuItem primaryText="Auctioneer" onClick={() => history.push("/auctioner")}/>
-    <MenuItem primaryText="Bidder" onClick={() => history.push("/bidder")}/>
+    <MenuItem primaryText="Auctioner" onClick={() => history.push("/home/auctioner")}/>
+    <MenuItem primaryText="Bidder" onClick={() => history.push("/home/bidder")}/>
     <MenuItem primaryText="Profile" onClick={() => history.push("/profile")}/>
     <MenuItem primaryText="Sign out" onClick={() => firebase.auth().signOut().then(history.push("/"))}/>
   </IconMenu>
 );
-function PrivateRoute1({ component: Component, authed, ...rest }) {
-  return (
-      <Route
-          {...rest}
-          render={(props) => authed === true
-              ? <Component {...props} />
-              : <Redirect to={{ pathname: '/home', state: { from: props.location } }} />}
-      />
-  )
-}
+
 class App extends Component {
   constructor(props){
     super(props);
@@ -93,14 +77,7 @@ class App extends Component {
                 <Route exact path="/" component={Login}/>
                 <Route path="/signup" component={Signup} />
                 <Route path="/home" component={Home}/>
-                <Route path="/auctioner" component={Auctioner} />
-                <Route path="/bidder" component={Bidder} />
-                <Route path="/computers" component={Computers} />
-                <Route path="/mobiles" component={Mobiles} />
-                <Route path="/electronics" component={Electronics} />
-                <Route path="/cameras" component={Cameras} />
-                <Route path="/others" component={Others} />
-                <Route path="/profile" component={Profile} />
+                <Route path="/profile" component={Profile}/>
             </div>
         </Router>
       </div>

@@ -66,10 +66,24 @@ class Others extends React.Component{
     let currentYear = todayDate.getFullYear()
     if((currentDay>auctionDay && currentMonth>=auctionMonth && currentYear>=auctionYear )||
     (currentDay === auctionDay && currentMonth===auctionMonth && currentYear===auctionYear && currentTime>endTime)){
-        return (
-            <RaisedButton label="Bid Expired" disabledBackgroundColor="red" disabled={true} disabledLabelColor="white"
-            onClick={()=>this.openViewBids(index,auctionPushKey)}/>
-        )
+        if(auctionerUid === this.state.userUid) {
+            return (
+                <div>
+                    <RaisedButton label="View Bid" secondary={true}
+                     onClick={()=>this.openViewBids(index,auctionPushKey)}/> 
+                    <RaisedButton label="Bid Expired" disabledBackgroundColor="red" 
+                    disabled={true} disabledLabelColor="white" style={{float:"right"}}
+                    onClick={()=>this.openViewBids(index,auctionPushKey)}/>
+                    
+                </div>
+            )
+        }
+        else{
+            return (
+                <RaisedButton label="Bid Expired" disabledBackgroundColor="red" disabled={true} disabledLabelColor="white"
+                onClick={()=>this.openViewBids(index,auctionPushKey)}/>
+            )
+        }
     }
     else{
         if (auctionerUid === this.state.userUid) {
@@ -83,7 +97,7 @@ class Others extends React.Component{
                 <div>
                     <RaisedButton label="Bid" primary={true} 
                         onClick={()=>this.handleOpenBid(index,auctionPushKey)}/>
-                    <span> {auctionBid}</span>
+                    <span> {auctionBid} rs</span>
                 </div>
             );
         }
@@ -127,8 +141,12 @@ class Others extends React.Component{
         {this.props.auctionsData.map((auction,index) => {
             if(auction.category === "Others"){
                 if(index === this.state.bidIndex){
-                    if(this.state.bid < Number(auction.bid)){
-                        alert(`Bid must be greater than : ${auction.bid}`)
+                    if(this.state.bid <= Number(auction.bid)){
+                        alert(`Bid must be greater than : ${auction.bid} rs`)
+                    }
+                    else if(this.state.bid > "900000000000"){
+                        alert(`Bid must be less than or equal to: 900000000000 rs`)
+
                     }
                     else{
                         this.props.startSubmitBid({
@@ -187,13 +205,15 @@ class Others extends React.Component{
                                 <div key={index}>
                                 <Card style={styles.card}>
                                     <CardMedia
+                                    style={styles.hoverCursor}
                                     onClick={()=>this.handleOpen(index)}
                                         overlay={<CardTitle title={auction.productName} subtitle={`Intial amount:${auction.amount}`} />}
                                     >
-                                    <img src={auction.img}  alt="image" style={{width:"200px",height:"250px"}} />
+                                    <img src={auction.img}  alt="image" style={{width:"200px",height:"250px"}} onmouseover="bigImg(this)" onmouseout="normalImg(this)"/>
                                     </CardMedia>
                                     <CardActions>
-                                    {this.renderButton(auction.userUid,auction.bid,index,auction.id,auction.auctionDay,auction.auctionMonth,auction.auctionYear,auction.endTime)}
+                                    {this.renderButton(auction.userUid,auction.bid,index,auction.id,auction.auctionDay,
+                                        auction.auctionMonth,auction.auctionYear,auction.endTime)}
                                     </CardActions>
                                     <div>
                                         <span style={{color:"blue",fontWeight:"bold"}}>Description</span>
@@ -210,6 +230,8 @@ class Others extends React.Component{
                         actions={actions}
                         modal={false}
                         open={this.state.open}
+                        style={{maxWidth:"90%"}}
+                        autoScrollBodyContent={true}
                         onRequestClose={this.handleClose}
                     >
                     {this.props.auctionsData.map((auction,index) => {
@@ -222,11 +244,11 @@ class Others extends React.Component{
                                     <div style={{width: '100%', height: 'auto'}} key={index}>
                                         <img src={auction.img} style={{width: '100%', height: 'auto'}}   alt="image"  onClick={()=>this.handleClose(index)}/>
                                         <hr/>
-                                        <p >Product Description: <span style={{maxWidth: "500px",overflow:"scroll"}}>{auction.description}</span></p>
+                                        <p style={{maxlength:"600px"}}>Product Description: {auction.description}</p>
                                         <p>End Date: <span style={styles.highlight}>{`${auction.auctionDay}/${auction.auctionMonth}/${auction.auctionYear}`}</span></p>                
                                         <p>End Time: <span style={styles.highlight}>{endTime}</span></p>                
-                                        <p>Intial Amount: <span style={styles.highlight}>${auction.amount}</span></p>
-                                        <p>Bid:{auction.bid}</p>
+                                        <p>Intial Amount: <span style={styles.highlight}>{auction.amount} rs</span></p>
+                                        <p>Last Bid:{auction.bid} rs</p>
                                         {this.renderButton(auction.userUid,auction.bid,index,auction.id,auction.auctionDay,auction.auctionMonth,auction.auctionYear,auction.endTime)}
                                     </div>
                                 )
@@ -247,8 +269,8 @@ class Others extends React.Component{
                                 return(
                                     <div style={{width: '100%', height: 'auto'}} key={index}>
                                         <hr/>
-                                        <p>{`Intial amount:${auction.amount}`}</p>
-                                        <p>Previous Bid:{auction.bid}</p>
+                                        <p>{`Intial amount:${auction.amount} rs`}</p>
+                                        <p>Last Bid:{auction.bid} rs</p>
                                         <TextField hintText="Enter your bid ..." type="number" value={this.state.bid}
                                         onChange={(e)=>{this.setState({bid:e.target.value})}}/>
                                     </div>
@@ -260,6 +282,7 @@ class Others extends React.Component{
                     <Dialog 
                         title="View Bid"
                         actions={actions3}
+                        contentStyle={styles.customContentStyle}
                         modal={false}
                         open={this.state.open3}
                         onRequestClose={this.handleCloseViewBid}
@@ -270,6 +293,8 @@ class Others extends React.Component{
                             <TableRow style={{textAlign:"center"}}>
                               <TableHeaderColumn style={{fontSize:"36",fontWeight:"bold",color:"blue"}}>Name</TableHeaderColumn>
                               <TableHeaderColumn style={{fontSize:"36",fontWeight:"bold",color:"blue"}}>Email</TableHeaderColumn>
+                              <TableHeaderColumn style={{fontSize:"36",fontWeight:"bold",color:"blue"}}>Address</TableHeaderColumn>
+                              <TableHeaderColumn style={{fontSize:"36",fontWeight:"bold",color:"blue"}}>Contact No</TableHeaderColumn>
                               <TableHeaderColumn style={{fontSize:"36",fontWeight:"bold",color:"blue"}}>Bid</TableHeaderColumn>
                             </TableRow>
                           </TableHeader>
@@ -284,7 +309,9 @@ class Others extends React.Component{
                                                     <TableRow key={user} >
                                                         <TableRowColumn style={{fontSize:"24",fontWeight:"bold"}}>{user.fullName}</TableRowColumn>
                                                         <TableRowColumn style={{fontSize:"24",fontWeight:"bold"}}>{user.email}</TableRowColumn>
-                                                        <TableRowColumn style={{fontSize:"24",fontWeight:"bold"}}>{auction.bid} </TableRowColumn>
+                                                        <TableRowColumn style={{fontSize:"24",fontWeight:"bold"}}>{user.address?user.address:"Not added"}</TableRowColumn>
+                                                        <TableRowColumn style={{fontSize:"24",fontWeight:"bold"}}>{user.contactNo?user.contactNo:"Not added"}</TableRowColumn>
+                                                        <TableRowColumn style={{fontSize:"24",fontWeight:"bold"}}>{auction.bid} rs</TableRowColumn>
                                                     </TableRow>
                                                 )
                                             }
@@ -312,6 +339,7 @@ const mapDispatchToProp = (dispatch) =>({
    getUsersData: (test) => dispatch(getUsersData(test)),
    startSubmitBid: (userDetails) => dispatch(startSubmitBid(userDetails))
 })
+export default connect(mapStateToProps, mapDispatchToProp)(Others);
 const styles = {
   card: {
     minHeight:'20%',
@@ -332,5 +360,11 @@ root: {
     alignItems: "center",
     overflowY: 'auto',
   },
+  hoverCursor:{
+    cursor: "pointer",
+  },
+  customContentStyle: {
+    width: '70%',
+    maxWidth: 'none',
+  }
 };
-  export default connect(mapStateToProps, mapDispatchToProp)(Others);

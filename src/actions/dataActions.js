@@ -2,9 +2,10 @@ import * as firebase from 'firebase'
 import history from '../history';
 
 // START-SUBMIT-AUCTION
-export const submitAuction = (data) => ({
+export const submitAuction = (data,flag) => ({
   type: 'START-SUBMIT-AUCTION',
-  data
+  data,
+  flag
 });
 
 export const startSubmitAuction = (auctionData = {}) =>{
@@ -23,6 +24,7 @@ export const startSubmitAuction = (auctionData = {}) =>{
         displayName='',
         userUid=''
         } = auctionData;
+        const flag=true
         let auctionRef = firebase.database().ref("/Auctions/").push()
         let auctionPushKey =  auctionRef.getKey()
         firebase.storage().ref(`/Images/${userUid}/${new Date().getTime()}`).put(img)
@@ -33,7 +35,7 @@ export const startSubmitAuction = (auctionData = {}) =>{
                       auctionYear:auctionYear,endTime:endTime,category:category,amount:amount,img:auctionData.img,displayName:displayName,
                       userUid:userUid,auctionPushKey:auctionPushKey
                     }).then(() => {
-                      dispatch(submitAuction(auctionData));
+                      dispatch(submitAuction(auctionData,flag));
                       alert(`Auction has submitted successfully!`)
                     })
                 })
@@ -45,7 +47,7 @@ export const startSubmitAuction = (auctionData = {}) =>{
 // START-SUBMIT-BID
 export const submitBid = (data) => ({
   type: 'START-SUBMIT-BID',
-  data
+  data,
 });
 
 export const startSubmitBid = (bidData = {}) =>{
@@ -88,14 +90,6 @@ export const getAuctionsData = (test={}) => {
     })
   };
 };
-
-
-
-
-
-
-
-
 // USER-DATA
 export const usersData = (data) => ({
     type: 'USER-DATA',
@@ -147,55 +141,23 @@ export const updateUser = (updates) => ({
 export const startUpdateUser= (updates={}) => {
   return (dispatch) => {
     const {
-      id='',
+      id='nouser',
       fullName='',
-      contactNo= "",
-      address ="",
+      contactNo= "Not added",
+      address ="Not added",
+      img=""
       } = updates;
     console.log(updates)
-          return firebase.database().ref(`Users/${updates.id}`).update(updates).then(() => {
-            dispatch(updateUser(updates));
-            alert("Your Profile has updated !")
-          })
-  };
-};
-// DELETE-USER
-export const deleteUser = (data) => ({
-  type: 'DELETE-USER',
-  data
-});
-export const startDeleteUser = (data1={}) => {
-  return (dispatch) => {
-            firebase.database().ref(`Users/${data1.userUid}`).remove()
-            
-            .then(()=>{
-              console.log(data1.userUid)
-              alert("User and it's bookings have removed sucessfully!")
-              dispatch(deleteUser(data1));
-            }).catch((e)=>console.log("Error while removing User",e))
-            firebase.database().ref("ParkingAreas").on('value',snapshot=> {
-              const data = [];
-              snapshot.forEach((childSnapshot) => {
-                data.push({
-                  id: childSnapshot.key,
-                  ...childSnapshot.val()
-                });
+    firebase.storage().ref(`/Images/${updates.id}/${new Date().getTime()}`).put(img)
+                .then((snap) => {
+                  updates.img = snap.metadata.downloadURLs[0];
+                  firebase.database().ref(`Users/${updates.id}`).update(updates).then(() => {
+                    dispatch(updateUser(updates));
+                    alert("Your Profile has updated !")
+                  })
+                })
+                .catch((error) => {
+                    console.log(error);
               });
-              data.map((bookings)=>{
-                (bookings.Slots)?
-                bookings.Slots.map((slotRef,index)=>{
-                  slotRef.Bookings?Object.keys(slotRef.Bookings).map((slot)=>{
-                        if(slotRef.Bookings[slot].userUid===data1.userUid){
-                          console.log(slotRef.Bookings[slot].userUid)
-                          console.log(bookings.pushKey)
-                          console.log(slotRef.Bookings[slot].bookingPushKey)
-                          console.log(index)
-                          firebase.database().ref(`/ParkingAreas/${bookings.pushKey}/Slots/${index}/Bookings/${slotRef.Bookings[slot].bookingPushKey}/`).update({booked:"false",
-                            startTime:'',endTime:'',userUid:'',parkingArea:'',parkingPlace:'',bookingPushKey:''})
-                  }
-                }):""
-                }):console.log("no slots")
-              })
-            })
-        };
+  };
 };

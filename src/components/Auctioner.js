@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import '../App.css';
 import * as firebase from 'firebase';
 import { startSubmitAuction} from '../actions/dataActions';
+import { dataReducer} from '../reducers/dataReducer';
 import {Spinner} from './Spinner';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
@@ -32,6 +33,7 @@ class Auctioner extends React.Component{
       route: false,
       img: '',
       imgValue: 0,
+      loading:false
     }
     }
     componentWillMount(){
@@ -46,6 +48,14 @@ class Auctioner extends React.Component{
           }
       });
   }
+//   componentWillReceiveProps(props){
+//     console.log(props.submitAuctionData.id)
+//     if(props.submitAuctionData){
+//         this.setState({
+//           loading:false
+//         })
+//     }
+// }
   handleChangeMinDate = (event, date) => {
     // console.log(date);        
     this.setState({
@@ -77,6 +87,7 @@ handleChangeTime = (event, time) => {
                 
      }
      else{
+       {this.setState({loading:true})}
         this.props.startSubmitAuction({
           productName:this.state.productName,
           description:this.state.description,
@@ -106,14 +117,21 @@ handleChangeTime = (event, time) => {
           displayName:'',
           userUid:''
         })
+        setTimeout(() => {
+          this.setState({
+          loading: false,
+        })
+      }, 3500);
       }
      }
      renderButton(){
       if (this.state.loading) {
-          return <Spinner/>;
+          return <center><Spinner/></center>
       }
       return(
-          <RaisedButton type='submit' label="Submit" primary={true} style={{marginLeft:"40%"}}/>
+        <center>
+          <RaisedButton type='submit' label="Submit" primary={true} style={{width:"70%",fontWeight:"bold"}}/>
+        </center>
       );
   }
     render(){
@@ -123,7 +141,6 @@ handleChangeTime = (event, time) => {
           <Paper zDepth={4}style={styles.style}>
                       <h1 style={{color:"blue",fontFamily:"Times New Roman",textAlign: 'center'}}>
                           Auction
-                          
                       </h1>
                       <Divider />
                       <TextField
@@ -172,7 +189,7 @@ handleChangeTime = (event, time) => {
                             <MenuItem value='Computers' primaryText='Computers' />
                             <MenuItem value='Mobiles' primaryText='Mobiles' />
                             <MenuItem value='Cameras' primaryText='Cameras' />
-                            <MenuItem value='electronics' primaryText='Electronics Item' />
+                            <MenuItem value='Electronics' primaryText='Electronics Item' />
                             <MenuItem value='Others' primaryText='Others' />
                         </SelectField>
                         <Divider />
@@ -208,7 +225,7 @@ handleChangeTime = (event, time) => {
       width: 500,
       backgroundColor:"lightGrey",
       marginTop: "7%",
-      marginLeft:"40%",
+      marginLeft:"37%",
       display: 'inline-block',
       opacity:"0.9",
     },
@@ -225,6 +242,12 @@ handleChangeTime = (event, time) => {
       maxWidth: 'none',
     }
   };
+  const mapStateToProps = (state)=>{
+    console.log(state)
+    return{
+      flag:state.dataReducer.submitAuctionData
+    }
+  }
   const mapDispatchToProp = (dispatch) =>({
     startSubmitAuction: (data) => dispatch(startSubmitAuction(data))
   })

@@ -12,6 +12,13 @@ import {GridList, GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import Subheader from 'material-ui/Subheader';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import Computers from './Computers';
+import Mobiles from './Mobiles';
+import Electronics from './Electronics';
+import Cameras from './Cameras';
+import Others from './Others';
+
 class Bidder extends React.Component{
   
     constructor(props){
@@ -40,19 +47,19 @@ class Bidder extends React.Component{
   categoryHandler = (category)=>{
     console.log(category)
     if(category === "Mobiles"){
-      history.push('./mobiles')
+      history.push('/home/bidder/mobiles')
     }
     else if(category === "Computers"){
-      history.push('./computers')
+      history.push('/home/bidder/computers')
     } 
     else if(category === "Cameras"){
-      history.push('./cameras')
+      history.push('/home/bidder/cameras')
     } 
     else if(category === "Electronics"){
-      history.push('./electronics')
+      history.push('/home/bidder/electronics')
     } 
     else {
-      history.push('./others')
+      history.push('/home/bidder/others')
     } 
   }
     render(){
@@ -76,29 +83,26 @@ class Bidder extends React.Component{
         {
           img: require(".././images/others.jpg"),
           title: 'Others',
-        },
+        }
       ];
       return(
-        <div className="signBackground" style={{width:"100%",height:600}}>
+        <div className="signBackground" style={{width:"100%",height:300}}>
             <h1 style={{color:"black",fontSize:"40px",fontFamily:"Times New Roman",
-            textAlign: 'center',marginTop:"10%"}}>
-                          Select an Auction category             
+              textAlign: 'center',marginTop:"5%"}}>
+                Select an Auction category             
             </h1>
             <div style={styles.root}>
-            <GridList style={styles.gridList} cols={2.2} cellHeight={200}>
-              {tilesData.map((tile) => (
+            <GridList style={styles.gridList} cols={4} cellHeight={200}>
+              {tilesData.map((tile,index) => (
                 <GridTile
-                  key={tile.img}
-                  title={<span style={{fontSize:"24px",fontWeight:"bold"}}>{`${tile.title}`}</span>}
-                  // actionIcon={<IconButton><StarBorder color="rgb(0, 188, 212)" /></IconButton>}
-                  titleStyle={styles.titleStyle}
-                  titleBackground="linear-gradient(to top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.3) 70%,rgba(0,0,0,0) 100%)"
-                >
-                  <img src={tile.img} onClick={()=>this.categoryHandler(tile.title)}/>
+                key={tile.index}
+                title={<span style={{fontSize:"24px",fontWeight:"bold"}}>{`${tile.title}`}</span>}
+              >
+                  <img src={tile.img} onClick={()=>this.categoryHandler(tile.title)} style={styles.hoverCursor}/>
                 </GridTile>
               ))}
             </GridList>
-            </div>        
+            </div> 
         </div>
       )
     }
@@ -117,20 +121,19 @@ const styles = {
   root: {
     display: 'flex',
     flexWrap: 'wrap',
-    // justifyContent: 'space-around',
-    margin:"0 auto",
-    maxWidth:"70%",
-    marginTop:"10%",
-    justifyContent:"center",
-    alignItems: "center"
+    justifyContent: 'space-around',
   },
   gridList: {
-    display: 'flex',
-    flexWrap: 'nowrap',
-    overflowX: 'auto',
+    width: "90%",
+    height: "200px",
+    overflowY: 'auto',
   },
+
   titleStyle: {
     color: 'rgb(0, 188, 212)',
+  },
+  hoverCursor:{
+    cursor: "pointer",
   },
 };
   export default connect(mapStateToProps, mapDispatchToProp)(Bidder);
