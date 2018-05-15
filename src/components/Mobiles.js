@@ -13,6 +13,8 @@ import {Spinner} from './Spinner';
 import FlatButton from 'material-ui/FlatButton';
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 import TextField from 'material-ui/TextField/TextField';
+import {GridList, GridTile} from 'material-ui/GridList';
+
 import {
     Table,
     TableBody,
@@ -194,15 +196,16 @@ class Mobiles extends React.Component{
         ];
       return(
         <div className="signBackground">
-            <h1 style={{color:"black",fontSize:"40px",fontFamily:"Times New Roman",
+            {/* <h1 style={{color:"black",fontSize:"40px",fontFamily:"Times New Roman",
             textAlign: 'center'}}>
                 Mobiles           
-            </h1>
+            </h1> */}
             <div style={styles.root}>
                     {this.props.auctionsData.map((auction,index) => {
                         if(auction.category === "Mobiles"){
                             return(
                                 <div key={index}>
+                                <Paper>
                                 <Card style={styles.card}>
                                     <CardMedia
                                     style={styles.hoverCursor}
@@ -220,6 +223,7 @@ class Mobiles extends React.Component{
                                         <p style={{width: "280px",textOverflow: "ellipsis",whiteSpace: "nowrap",overflow:"hidden"}}>{auction.description}</p>
                                     </div>
                                 </Card>
+                                </Paper>
                                 </div>
                             )
                         }
@@ -353,9 +357,9 @@ root: {
     display: 'flex',
     flexWrap: 'wrap',
     margin:"0 auto",
-    maxHeight:"99%",
+    maxHeight:"780px",
     maxWidth:"80%",
-    marginTop:"2%",
+    marginTop:"1%",
     justifyContent:"center",
     alignItems: "center",
     overflowY: 'auto',
@@ -366,5 +370,5 @@ root: {
   customContentStyle: {
     width: '70%',
     maxWidth: 'none',
-  }
+  },
 };

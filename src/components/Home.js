@@ -30,29 +30,36 @@ import TimePicker from 'material-ui/TimePicker';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import {Spinner} from './Spinner';
+import Description from 'react-icons/lib/md/description'
 const routes = [
   {
     path: "/home/bidder/mobiles",
     exact: true,
+    sidebar: () => <Mobiles/>,
     main: () => <Mobiles/>
   },
   {
     path: "/home/bidder/computers",
     exact: true,
+    sidebar: () => <Computers/>,
     main: () => <Computers/>
   },
   {
     path: "/home/bidder/electronics",
+    exact: true,
+    sidebar: () => <Electronics/>,
     main: () => <Electronics/>
   },
   {
     path: "/home/bidder/cameras",
     exact: true,
+    sidebar: () => <Cameras/>,
     main: () => <Cameras/>
   },
   {
     path: "/home/bidder/others",
     exact: true,
+    sidebar: () => <Others/>,
     main: () => <Others/>
   }
 ];
@@ -77,7 +84,8 @@ class Home extends React.Component{
       route: false,
       img: '',
       imgValue: 0,
-      loading:false
+      loading:false,
+      flag:''
 
     }
     }
@@ -105,19 +113,35 @@ class Home extends React.Component{
   categoryHandler = (category)=>{
     console.log(category)
     if(category === "Mobiles"){
-      history.push('/home/bidder/mobiles')
+      this.setState({
+        flag:'mobile'
+      })
+      // history.push('/home/bidder/mobiles')
     }
     else if(category === "Computers"){
-      history.push('/home/bidder/computers')
+      this.setState({
+        flag:'computer'
+      })
+      // history.push('/home/bidder/computers')
     } 
     else if(category === "Cameras"){
-      history.push('/home/bidder/cameras')
+      this.setState({
+        flag:'camera'
+      })
+      // history.push('/home/bidder/cameras')
     } 
     else if(category === "Electronics"){
-      history.push('/home/bidder/electronics')
+
+      this.setState({
+        flag:'electronic'
+      })
+      // history.push('/home/bidder/electronics')
     } 
     else {
-      history.push('/home/bidder/others')
+      this.setState({
+        flag:'other'
+      })
+      // history.push('/home/bidder/others')
     } 
   }
   handleChangeMinDate = (event, date) => {
@@ -224,11 +248,6 @@ class Home extends React.Component{
       let todayDate = new Date()
       return(
             <div>
-                  <div style={{height:"40px",color:"black",backgroundColor:"lightBlue",marginTop:"-24px"}}>
-                    <center>
-                        <p style={{fontSize:"24px"}}>{`Welcome ${this.state.displayName} to the Real Time Auction App`}</p>
-                    </center>
-                </div>
                   <Tabs
                     onChange={this.handleChangeTab}
                     value={this.state.slideIndex}
@@ -240,23 +259,29 @@ class Home extends React.Component{
                     index={this.state.slideIndex}
                     onChangeIndex={this.handleChangeTab}
                   >
-                <div style={styles.root}>
-                  <Card zDepth={2}>
-                      <CardHeader
-                        title="Categories"
-                      />
-                      <GridList style={styles.gridList} cols={1} cellHeight={120}>
-                    {tilesData.map((tile,index) => (
-                      <GridTile
-                      key={tile.index}
-                      title={<span style={{fontSize:"16px",fontWeight:"bold"}}>{`${tile.title}`}</span>}
-                    >
-                        <img src={tile.img} onClick={()=>this.categoryHandler(tile.title)} style={styles.hoverCursor}/>
-                      </GridTile>
-                    ))}
-                  </GridList>
-                  </Card>
-             </div>
+                  <div style={{display:"inline-flex"}}>
+                    <div style={styles.root}>
+                      <Card zDepth={2}>
+                          <CardHeader
+                            title="Categories"
+                          />
+                          <GridList style={styles.gridList} cols={1} cellHeight={142}>
+                        {tilesData.map((tile,index) => (
+                          <GridTile
+                          key={tile.index}
+                          title={<span style={{fontSize:"16px",fontWeight:"bold"}}>{`${tile.title}`}</span>}
+                        >
+                            <img src={tile.img} onClick={()=>this.categoryHandler(tile.title)} style={styles.hoverCursor}/>
+                          </GridTile>
+                        ))}
+                      </GridList>
+                      </Card>
+                  </div>
+                  <div>
+                    {this.state.flag==='mobile'?<Mobiles/>:this.state.flag==='computer'?<Computers/>:
+                    this.state.flag==='camera'?<Cameras/>:this.state.flag==='electronic'?<Electronics/>:<Others/>}
+                  </div>
+                  </div>
                 <div style={styles.slide}>
                 <form onSubmit={this.submitForm}>
                     <Paper zDepth={4}style={styles.style}>
@@ -267,17 +292,19 @@ class Home extends React.Component{
                                 <TextField
                                       floatingLabelText="Product Name"
                                       required
+                                      width="700px"
                                       style={{marginLeft:"20px"}}
-                                      underlineShow={false}
+                                      // underlineShow={false}
                                       value={this.state.productName}
                                       onChange={(e)=> this.setState({productName: e.target.value})}                            
                                   />
                                   <Divider />
                                   <TextField
+                                  iconElementLeft={<Description />}
                                       floatingLabelText="Discription"
                                       required  
                                       style={{marginLeft:"20px"}}
-                                      underlineShow={false}
+                                      // underlineShow={false}
                                       value={this.state.description}                      
                                       onChange={(e)=> this.setState({description: e.target.value})}                            
                                   />
@@ -287,7 +314,7 @@ class Home extends React.Component{
                                       autoOk
                                       required   
                                       style={{marginLeft:"20px"}}
-                                      underlineShow={false}                         
+                                      // underlineShow={false}                         
                                       minDate={todayDate}
                                       value={this.state.minDate}
                                       onChange={this.handleChangeMinDate}
@@ -299,14 +326,14 @@ class Home extends React.Component{
                                       autoOk={true}
                                       required  
                                       style={{marginLeft:"20px"}}
-                                      underlineShow={false}   
+                                      // underlineShow={false}   
                                       value={this.state.endTime}                       
                                       onChange={this.handleChangeTime}
                                   />
                                   <Divider />
                                   <SelectField style={{lineHeight: '60px'}} style={{marginLeft:"20px", width: 360}}
                                     underlineShow={false} value={this.state.category}
-                                    onChange={this.handleChange} hintText="Category" floatingLabelText="Category" >
+                                    onChange={this.handleChange} hintText="Category" floatingLabelText="Category" iconStyle={{backgroundColor:"gray"}}>
                                       <MenuItem value='Computers' primaryText='Computers' />
                                       <MenuItem value='Mobiles' primaryText='Mobiles' />
                                       <MenuItem value='Cameras' primaryText='Cameras' />
@@ -325,7 +352,7 @@ class Home extends React.Component{
                                       floatingLabelText="Starting Amount"
                                       required
                                       style={{marginLeft:"20px"}}
-                                      underlineShow={false}
+                                      // underlineShow={false}
                                       value={this.state.amount}
                                       onChange={(e)=> this.setState({amount: e.target.value})}
                                   />
@@ -354,10 +381,12 @@ class Home extends React.Component{
   const styles = {
     root: {
       flexWrap: 'wrap',
+      // width:"70%",
       justifyContent: 'space-around',
+      // display:"inline-flex"
     },
     gridList: {
-      width: "12%",
+      width: "200px",
       height: "auto",
       // overflowY: 'auto',
     },
@@ -371,7 +400,7 @@ class Home extends React.Component{
     style : {
       height: 630,
       width: 500,
-      backgroundColor:"lightGrey",
+      // backgroundColor:"lightGrey",
       marginTop: "7%",
       marginLeft:"37%",
       display: 'inline-block',

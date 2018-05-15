@@ -14,13 +14,13 @@ import AppBar from 'material-ui/AppBar';
 import firebase from 'firebase'
 import history from './history';
 import Home from './components/Home';
-import { blueGrey500, blueGrey900, blue100, indigo100, indigo500, blue900, blue500, grey50, red100 } from 'material-ui/styles/colors';
+import { blueGrey500, cyan100,blueGrey900, blue100, indigo100, indigo500, blue900, blue500, grey50, red100 } from 'material-ui/styles/colors';
 import Profile from './components/Profile';
 const Logged = (props) => (
   <IconMenu
     {...props}
     iconButtonElement={
-      <IconButton><MoreVertIcon /></IconButton>
+      <IconButton><MoreVertIcon color="white"/></IconButton>
     }
     targetOrigin={{horizontal: 'right', vertical: 'top'}}
     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
@@ -36,14 +36,16 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state={
-      logged: false
+      logged: false,
+      email:''
     }
   }
   componentWillMount() {
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           this.setState({
-            authed: true
+            authed: true,
+            email:user.email
         })
         let type = localStorage.getItem("type")
         let convertype = JSON.parse(type)
@@ -66,7 +68,7 @@ class App extends Component {
             title="Real Time Auction System"
             style={{background:indigo500,borderBottom:"3px solid blue"}}
             iconElementLeft={<IconButton></IconButton>}
-            iconElementRight={this.state.authed ? <Logged /> : 
+            iconElementRight={this.state.authed ? <div style={{display:"inline-flex"}}><p style={{color:cyan100,marginTop:"16px",fontWeight:"bold"}}>{this.state.email}</p> <Logged /></div> : 
             <div style={{paddingTop:"7px"}}>
               <RaisedButton label="Sign in" style={{color:grey50}} onClick={() => history.push('/')} />
               <RaisedButton label="Sign up"  style={{color:grey50}} onClick={() => history.push('/signup')} />
