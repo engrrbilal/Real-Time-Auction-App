@@ -292,7 +292,7 @@ class Home extends React.Component{
                                 <TextField
                                       floatingLabelText="Product Name"
                                       required
-                                      width="700px"
+                                      width="60%"
                                       style={{marginLeft:"20px"}}
                                       // underlineShow={false}
                                       value={this.state.productName}
